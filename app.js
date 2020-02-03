@@ -1,15 +1,10 @@
+'use strict'
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const debug = require('debug')('app')
-
-const indexRouter = require('./routes/index.js');
-const usersRouter = require('./routes/api/users.js');
-const videosRouter = require('./routes/api/albums.js');
-const adminRouter = require('./routes/api/admin.js');
-const loginRouter = require('./routes/login.js');
+const debug = require('debug')('app');
 
 var app = express();
 
@@ -21,12 +16,21 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/', indexRouter);
-app.use('/api/users', usersRouter);
-app.use('/api/albums', videosRouter);
-app.use('/api/admin', adminRouter);
-app.use('/api/login', loginRouter);
+
+
+app.set('routes', path.join(__dirname, 'routes'));
+const loginRouter = require('./routes/login');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/api/users');
+const videosRouter = require('./routes/api/albums');
+const adminRouter = require('./routes/api/admin');
+
+app.get('/login/', loginRouter);
+app.get('/', indexRouter);
+app.get('/api/users', usersRouter);
+app.get('/api/albums', videosRouter);
+app.get('/api/admin', adminRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -41,7 +45,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render(err);
+  res.render(err.debug);
 });
 app.listen(3000)
 module.exports = app;

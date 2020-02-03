@@ -1,9 +1,10 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const login_p = express.Router();
 
-/* GET home page. */
-router.get('/login', function(req, res) {
-  res.render('login page');
+/* GET login page. */
+login_p.get('/login', function(req, res, next) {
+  return res.render('login.ejs');
+  next();
 });
 
-module.exports = router;
+module.exports = login_p;
