@@ -5,9 +5,11 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const debug = require('debug')('app')
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const videosRouter = require('./routes/videos');
+const indexRouter = require('./routes/index.js');
+const usersRouter = require('./routes/api/users.js');
+const videosRouter = require('./routes/api/albums.js');
+const adminRouter = require('./routes/api/admin.js');
+const loginRouter = require('./routes/login.js');
 
 var app = express();
 
@@ -21,8 +23,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/videos', videosRouter)
+app.use('/api/users', usersRouter);
+app.use('/api/albums', videosRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/login', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -37,7 +41,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error.ejs');
+  res.render(err);
 });
 app.listen(3000)
 module.exports = app;
