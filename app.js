@@ -21,15 +21,15 @@ app.use(cookieParser());
 app.set('routes', path.join(__dirname, 'routes'));
 const loginRouter = require('./routes/login');
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/api/users');
-const videosRouter = require('./routes/api/albums');
-const adminRouter = require('./routes/api/admin');
+const usersRouter = require('./routes/users_page');
+const videosRouter = require('./routes/albums_page');
+const adminRouter = require('./routes/admin_page');
 
 app.get('/login/', loginRouter);
 app.get('/', indexRouter);
-app.get('/api/users', usersRouter);
-app.get('/api/albums', videosRouter);
-app.get('/api/admin', adminRouter);
+app.get('/users', usersRouter);
+app.get('/albums', videosRouter);
+app.get('/admin', adminRouter);
 
 
 // catch 404 and forward to error handler

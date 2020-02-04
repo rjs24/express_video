@@ -21,10 +21,10 @@ describe('GET/ ', () => {
     });
 });
 
-describe('GET/  /api/users', () => {
-    it('it should load users page and data', (done) =>{
+describe('GET/  /users', () => {
+    it('it should load current users data', (done) =>{
         chai.request(route)
-        .get('/api/users')
+        .get('/users')
         .end((err, result) => {
             result.should.have.status(200);
             result.should.be.string;
@@ -33,10 +33,10 @@ describe('GET/  /api/users', () => {
     });
 });
 
-describe('GET/ api/albums', () => {
+describe('GET/ /albums', () => {
     it('it should load albums of photos and videos', (done) =>{
         chai.request(route)
-        .get('/api/albums')
+        .get('/albums')
         .end((err, result) => {
             result.should.have.status(200);
             result.should.be.string;
@@ -45,10 +45,10 @@ describe('GET/ api/albums', () => {
     });
 });
 
-describe('GET/ /api/admin', () => {
+describe('GET/ /admin', () => {
     it('it should load admin page', (done) =>{
         chai.request(route)
-        .get('/api/admin')
+        .get('/admin')
         .end((err, result) => {
             result.should.have.status(200);
             result.should.be.string;
@@ -57,7 +57,7 @@ describe('GET/ /api/admin', () => {
     });
 });
 
-describe('GET/ login', () => {
+describe('GET/ /login', () => {
     it('it should load login page', (done) =>{
         chai.request(route)
         .get('/login')
