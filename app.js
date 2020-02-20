@@ -9,7 +9,7 @@ const debug = require('debug')('app');
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(path.resolve(), 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
@@ -18,18 +18,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 
-app.set('routes', path.join(__dirname, 'routes'));
+app.set('routes', path.join(path.resolve(), 'routes'));
 const loginRouter = require('./routes/login');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users_page');
 const videosRouter = require('./routes/albums_page');
 const adminRouter = require('./routes/admin_page');
+const user_apis = require('./routes/api/users_methods');
 
 app.get('/login/', loginRouter);
 app.get('/', indexRouter);
 app.get('/users', usersRouter);
 app.get('/albums', videosRouter);
 app.get('/admin', adminRouter);
+app.post('/api/users/search', user_apis);
 
 
 // catch 404 and forward to error handler
