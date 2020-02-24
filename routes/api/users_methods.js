@@ -80,3 +80,42 @@ router.post("/api/users/create", async function(rq, rs) {
     });
   }
 });
+
+// edit a current users details
+router.put("/api/users/edit", async function(rq, rs) {
+  if(!rq.body.userid)  {
+    return rs.status(400).send({
+      success: 'false',
+      message: 'You must provide a userid and the attribute you wish to change'
+    });
+  } else {
+    const username = rq.body.userid;
+    let body = rq.body;
+      for (var property in body) {
+        if(property != 'userid' && property != undefined) {
+            let value = body[property]
+            console.log(value);
+            let update_str = "UPDATE " + table + " SET " + property + " = '" + value + "' WHERE userid = '" + username +"';";
+            console.log(update_str);
+            var user_edit = db.query(update_str, (err, res) => {
+              if (err) {
+                console.log(err);
+                return rs.status(500).send({
+                  success: 'false',
+                  message: 'Not able to edit user '+ username
+                });
+              } else if (res) {
+                return rs.status(200).send({
+                  success: 'true',
+                  message: { "outcome": username + " has been edited.",
+                              property : property + " has been updated." },
+                  updated: true
+                });
+              }
+            })
+          } else {
+            continue;
+          };
+        }
+    }
+  });

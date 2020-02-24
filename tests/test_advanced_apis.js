@@ -46,13 +46,14 @@ describe('POST/  /api/users/create', () => {
 describe('PUT/  /api/users/edit', () => {
     it('it should allow specified user (userId) fields to be edited', (done) =>{
         chai.request(route)
-        .put('/api/users/edit'+result.body[0].userId)
-        .send({"firstName": "new first_name", "lastName": "new last_name", "email": "new email", "email_verified": false })
+        .put('/api/users/edit')
+        .send({"userid": "josey", "first_name": "Joanna" })
         .end((err, result) => {
             result.should.have.status(200);
             result.should.be.json;
-            result.body.should.have.property('UPDATED');
-            result.body.SUCCESS.should.have.a.property('userId');
+            result.body.should.have.property('updated');
+            result.body.should.have.property('success');
+            result.body.message.should.have.a.property("outcome")
         done();
         });
     });
