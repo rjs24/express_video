@@ -18,25 +18,26 @@ describe('POST/  /api/users/search', () => {
         .end((err, result) => {
             result.should.have.status(200);
             result.should.be.json;
-            result.body.should.have.property('SUCCESS');
-            result.body.SUCCESS.should.have.a.property('userId');
-            result.body.SUCCESS.should.have.a.property('first_name');
-            result.body.SUCCESS.should.have.a.property('last_name');
+            result.body.should.have.property('success');
+            result.body.message[0].should.have.a.property('userid');
+            result.body.message[0].should.have.a.property('first_name');
+            result.body.message[0].should.have.a.property('second_name');
         done();
         });
     });
 });
+
 // POST create a new user
 describe('POST/  /api/users/create', () => {
     it('it should create new user and return id', (done) =>{
         chai.request(route)
         .post('/api/users/create')
-        .send({"firstName": "joe", "lastName": "bloggs", "email": "joe.bloggs@email.co.uk", "email_verified": false })
-        .end((err, result) => {
+        .send({"firstName": "joe", "lastName": "bloggs", "email": "joe.bloggs@email.co.uk", "dofb": "2000-02-14" })
+        .end((err, result) => {-
             result.should.have.status(200);
             result.should.be.json;
-            result.body.should.have.property('SUCCESS');
-            result.body.SUCCESS.should.have.a.property('userId');
+            result.body.should.have.property('success');
+            result.body.message.should.have.a.property('userId');
         done();
         });
     });
