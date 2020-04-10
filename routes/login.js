@@ -3,7 +3,7 @@ const login_p = express.Router();
 
 /* GET login page. */
 login_p.get('/login', function(req, res, next) {
-  return res.render('login.ejs');
+  return res.render('pages/login');
   next();
 });
 

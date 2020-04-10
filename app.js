@@ -26,7 +26,7 @@ const videosRouter = require('./routes/albums_page');
 const adminRouter = require('./routes/admin_page');
 const user_apis = require('./routes/api/users_methods');
 
-app.get('/login/', loginRouter);
+app.get('/login', loginRouter);
 app.get('/', indexRouter);
 app.get('/users', usersRouter);
 app.get('/albums', videosRouter);
