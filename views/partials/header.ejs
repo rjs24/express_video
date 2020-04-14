@@ -1,19 +1,40 @@
-<nav class="navbar navbar-default">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>                        
-        </button>
-        <a class="navbar-brand" href="#">LOGO</a>
+<div class="bg-light border-right" id="sidebar-wrapper">
+  <nav id="sidebar">
+    <div class="img bg-wrap text-center py-4">
+      <div class="user-logo">
+        <a href="/">
+          <img id="logo" src="media/logo.png" alt="Home page" width="150" height="100">
+        </a>
       </div>
-      <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav navbar-right">
-          <li id="home"><a href="/">HOME</a></li>
-          <li id="about"><a href="/about">ABOUT US</a></li>
-          <li id="contact"><a href="/contact">CONTACT US</a></li>
-        </ul>
+      <div class="user_name"
+        <% if(locals.user !== ""){ %>
+          <h3>Hi <%= user %></h3>
+        <% } else { %>
+          <span> <a href="/login" id="menu">Signin</a>
+            <a href="/register" id="menu">Register</a> </span>
+        <% } %>
       </div>
     </div>
+    <div class="list-group list-group-flush">
+      <ul class="list-unstyled components">
+        <li class="active">
+            <li>
+              <a href="/about" id="menu">About</a>
+            </li>
+            <li>
+              <a href=/news id="menu">News</a>
+            </li>
+            <li>
+              <a href=/users id="menu">Friends and Family</a>
+            </li>
+            <li>
+              <a href=/albums id="menu">Photos and videos</a>
+            </li>
+            <li>
+              <a href=/settings id="menu">Settings</a>
+            </li>
+        </li>
+      </ul>
+    </div>
   </nav>
+</div>
