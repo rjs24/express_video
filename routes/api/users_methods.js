@@ -4,7 +4,7 @@ const db = require('../db_conns').db_conn.DB_CONNECT;
 const bodyParser = require('body-parser');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended : true }));
-const table = "node_vid_test_db";
+const table = "users";
 
 /* GET users listing. */
 router.get('/api/users', function(req, res) {
