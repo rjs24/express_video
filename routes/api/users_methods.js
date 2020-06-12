@@ -6,11 +6,6 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended : true }));
 const table = "users";
 
-/* GET users listing. */
-router.get('/api/users', function(req, res) {
-  res.send('this is the users resource');
-});
-
 module.exports = router;
 
 // working quick db test connection which shows current data in shell
@@ -22,14 +17,23 @@ console.log(db.query('SELECT * FROM node_vid_test_db', (err, res) => {
 ));
 */
 // rest method to search for a user
-router.post("/api/users/search", async function(rq, rs) {
-  if(!rq.body.userId) {
-    return rs.status(400).send({
-      success: 'false',
-      message: 'You have not specified a userId'
+router.get("/api/users/", async function(rq, rs) {
+  if(!rq.query.userId) {
+    const all_query_str = "SELECT * FROM " + table + ";";
+    const all_query = db.query(all_query_str, (err, res) => {
+      if(err) {
+        return rs.status(400).send({
+          success: 'false',
+          message: 'user db error'
+      }); 
+    } else {
+        return rs.status(200).send({
+        success: 'success',
+        message: res.rows
     });
-  } else {
-    const user_id = rq.body.userId;
+  } });
+} else {
+    const user_id = rq.query.userId;
     const query_str = "SELECT * FROM " + table + " WHERE userid like '%" + user_id + "%';";
     const userId_query = db.query(query_str, (err, res) => {
       if (err) {
@@ -48,7 +52,7 @@ router.post("/api/users/search", async function(rq, rs) {
 });
 
 // rest method to create a new user
-router.post("/api/users/create", async function(rq, rs) {
+router.post("/api/users/", async function(rq, rs) {
   if(!rq.body.firstName || !rq.body.lastName || !rq.body.email || !rq.body.dofb )  {
     return rs.status(400).send({
       success: 'false',
@@ -71,7 +75,7 @@ router.post("/api/users/create", async function(rq, rs) {
           message: 'user not created'
         });
       } else if (res) {
-        return rs.status(200).send({
+        return rs.status(201).send({
           success: 'true',
           message: { "outcome": username + " has been created.",
                       "userId" : username }
@@ -82,7 +86,7 @@ router.post("/api/users/create", async function(rq, rs) {
 });
 
 // edit a current users details
-router.put("/api/users/edit", async function(rq, rs) {
+router.put("/api/users/", async function(rq, rs) {
   if(!rq.body.userid)  {
     return rs.status(400).send({
       success: 'false',
@@ -92,12 +96,12 @@ router.put("/api/users/edit", async function(rq, rs) {
     const username = rq.body.userid;
     let body = rq.body;
       for (var property in body) {
-        if(property != 'userid' && property != undefined) {
+        if(property != 'userid' && property != undefined && property != 'connections') {
             let value = body[property]
             console.log(value);
             let update_str = "UPDATE " + table + " SET " + property + " = '" + value + "' WHERE userid = '" + username +"';";
             console.log(update_str);
-            var user_edit = db.query(update_str, (err, res) => {
+            const user_edit = db.query(update_str, (err, res) => {
               if (err) {
                 console.log(err);
                 return rs.status(500).send({
@@ -119,3 +123,31 @@ router.put("/api/users/edit", async function(rq, rs) {
         }
     }
   });
+
+// delete a current users details
+router.delete('/api/users/', async function(rq, rs) {
+  console.log(rq.body.userid);
+  if(!rq.body.userid)  {
+    return rs.status(400).send({
+      success: 'false',
+      message: 'You must supply a user_id for the delete operation.'
+    });
+  } else {
+    const user_id = rq.body.userid;
+    const delete_str = "DELETE * FROM " + table + " WHERE userid like '%" + user_id + "%';";
+    const user_deletion = db.query(delete_str, (err, res) => {
+      if (err) {
+        console.log(err);
+        return rs.status(500).send({
+          success: 'false',
+          message: 'user not deleted'
+        });
+      } else if (res) {
+        return rs.status(200).send({
+          success: 'true',
+          message: { "outcome": username + " deleted." }
+        });
+      }
+    });
+  }
+});

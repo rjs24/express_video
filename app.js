@@ -32,9 +32,9 @@ app.get('/', indexRouter);
 app.get('/users', usersRouter);
 app.get('/albums', videosRouter);
 app.get('/admin', adminRouter);
-app.post('/api/users/search', user_apis);
-app.post('/api/users/create', user_apis);
-app.put('/api/users/edit', user_apis);
+app.get('/api/users/', user_apis);
+app.post('/api/users/', user_apis);
+app.put('/api/users/', user_apis);
 
 
 // catch 404 and forward to error handler

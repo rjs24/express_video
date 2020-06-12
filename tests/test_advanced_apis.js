@@ -9,12 +9,11 @@ chai.use(chai_http);
 let should = chai.should();
 
 // users page testing
-// POST search for a user
-describe('POST/  /api/users/search', () => {
+// GET search for a user
+describe('GET/  /api/users/', () => {
     it('it should load a specified users data', (done) =>{
         chai.request(route)
-        .post('/api/users/search')
-        .send({"userId": "richy"})
+        .get('/api/users/?userId=richy')
         .end((err, result) => {
             result.should.have.status(200);
             result.should.be.json;
@@ -41,6 +40,7 @@ describe('POST/  /api/users/tag', () => {
         });
     });
 });
+
 // DELETE an album tag for an existing user
 describe('DELETE/  /api/users/tag', () => {
     it('it should allow an album tag to be removed from the specified user', (done) =>{
@@ -91,13 +91,13 @@ describe('POST/  /api/users/remove_connection', () => {
 
 // admin functions
 // POST create a new user
-describe('POST/  /api/users/create', () => {
+describe('POST/  /api/users/', () => {
     it('it should create new user and return id', (done) =>{
         chai.request(route)
-        .post('/api/users/create')
+        .post('/api/users/')
         .send({"firstName": "joe", "lastName": "bloggs", "email": "joe.bloggs@email.co.uk", "dofb": "2000-02-14" })
-        .end((err, result) => {-
-            result.should.have.status(200);
+        .end((err, result) => {
+            result.should.have.status(201);
             result.should.be.json;
             result.body.should.have.property('success');
             result.body.message.should.have.a.property('userId');
@@ -106,22 +106,66 @@ describe('POST/  /api/users/create', () => {
     });
 });
 // PUT edit details for existing user
-describe('PUT/  /api/users/edit', () => {
+describe('PUT/  /api/users/', () => {
+    let user_id;
     it('it should allow specified user (userId) fields to be edited', (done) =>{
         chai.request(route)
-        .put('/api/users/edit')
-        .send({"userid": "josey", "first_name": "Joanna" })
+        .post('/api/users/')
+        .send({"firstName": "josey", "lastName": "bloggs", "email": "josey.bloggs@email.co.uk", "dofb": "2000-02-14" })
         .end((err, result) => {
-            result.should.have.status(200);
-            result.should.be.json;
-            result.body.should.have.property('updated');
             result.body.should.have.property('success');
-            result.body.message.should.have.a.property("outcome")
-        done();
+            result.body.message.should.have.a.property('userId')
+            user_id = result.body.message.userId;
+            if(user_id == null) {
+                return err;
+            } else {
+                chai.request(route)
+                    .put('/api/users/')
+                    .send({"userid": `${user_id}`, "first_name": "Joanna" })
+                    .end((err, result) => {
+                        if(err) throw err;
+                        result.should.have.status(200);
+                        result.should.be.json;
+                        result.body.should.have.property('updated');
+                        result.body.should.have.property('success');
+                        result.body.message.should.have.a.property("outcome");
+                    done();
+            });
+        }
         });
     });
 });
-// POST to breate new album
+
+// GET search for a user then DELETE user.
+describe('DELETE/  /api/users/', () => {
+    let user_id;
+    it('it should load a specified users data then DELETE the user', (done) =>{
+        chai.request(route)
+        .get('/api/users/')
+        .end((err, result) => {
+            result.should.have.status(200);
+            result.should.be.json;
+            result.body.should.have.property('success');
+            result.body.message[0].should.have.a.property('userid');
+            user_id = result.body.message[2].userid;
+            if(user_id == null) {
+                return err;
+            } else {
+                chai.request(route)
+                .delete('/api/users/')
+                .send({"userid": `${user_id}`})
+                .end((err, result) => {
+                    if(err) throw err;
+                    result.should.have.status(204);
+                    result.body.should.be.json;
+                    // result.body.should.have.a.property("outcome");
+                done();
+                });
+            }
+        });
+    });
+});
+// POST to create new album
 describe('POST/  /api/albums/create', () => {
     it('it should create new album and return album_id', (done) =>{
         chai.request(route)
