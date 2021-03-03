@@ -19,7 +19,7 @@
     "mongodb": "^3.6.1",
     "morgan": "~1.9.1",
     "pg": "^8.3.3",
-    "pug": "^2.0.4"
+    "pug": "^3.0.1"
   },
   "devDependencies": {
     "constantinople": "^4.0.1",
